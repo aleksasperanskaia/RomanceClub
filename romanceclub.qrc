@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>story.json</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>backgrounds/car.jpg</file>
+        <file>backgrounds/room.jpg</file>
+        <file>backgrounds/sea.jpg</file>
+        <file>backgrounds/street.jpg</file>
+        <file>backgrounds/wedding.jpg</file>
+        <file>characters/allahverdi.png</file>
+        <file>characters/attila.png</file>
+        <file>characters/fatima.png</file>
+        <file>characters/leyla.png</file>
+        <file>characters/rauf.png</file>
+    </qresource>
+</RCC>
