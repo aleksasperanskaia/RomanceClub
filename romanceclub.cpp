@@ -1,178 +1,197 @@
 #include "romanceclub.h"
-#include <QDebug>
-#include <QPushButton>
 #include <QFile>
-#include <QDir>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QGraphicsOpacityEffect>
+#include <QEasingCurve>
+#include <QPropertyAnimation>
 
-RomanceClub::RomanceClub(QWidget *parent)
-    : QMainWindow(parent)
+RomanceClub::RomanceClub(QWidget *parent) : QMainWindow(parent)
 {
-    setupUI();
+    setWindowTitle("Добро пожаловать в Азербайджаснкий Romance Club");
+    resize(1024, 768);
+
+    stack = new QStackedWidget(this);
+    setCentralWidget(stack);
+
+    setupWelcomeScreen();
+    setupGameScreen();
+    setupEndingScreen();
+
+    loadGameData();
 }
 
-void RomanceClub::setupUI()
+void RomanceClub::setupWelcomeScreen()
 {
-    // Set window properties
-    setWindowTitle("Romance Club");
-    resize(800, 600);
+    welcomeScreen = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(welcomeScreen);
 
-    // Create central widget and layout
-    centralWidget = new QWidget(this);
-    mainLayout = new QVBoxLayout(centralWidget);
+    QLabel *welcomeImage = new QLabel();
+    welcomeImage->setPixmap(QPixmap(":/images/backgrounds/welcome.png").scaled(800, 450, Qt::KeepAspectRatio));
+    welcomeImage->setAlignment(Qt::AlignCenter);
 
-    // Create background view
-    backgroundScene = new QGraphicsScene(this);
-    backgroundView = new QGraphicsView(backgroundScene);
-    backgroundView->setFixedHeight(300);
-    backgroundView->setStyleSheet("border: 1px solid gray;");
+    QPushButton *startButton = new QPushButton("Начать");
+    startButton->setStyleSheet(
+        "QPushButton {"
+        "   font-size: 24px;"
+        "   background-color: #e74c3c;"
+        "   color: white;"
+        "   padding: 15px 30px;"
+        "   border-radius: 10px;"
+        "}"
+        );
+    connect(startButton, &QPushButton::clicked, this, &RomanceClub::startGame);
 
-    // Create character view
-    characterScene = new QGraphicsScene(this);
-    characterView = new QGraphicsView(characterScene);
-    characterView->setFixedHeight(200);
-    characterView->setStyleSheet("border: 1px solid gray;");
+    layout->addWidget(welcomeImage);
+    layout->addWidget(startButton, 0, Qt::AlignCenter);
 
-    // Create text label
+    stack->addWidget(welcomeScreen);
+}
+
+void RomanceClub::setupGameScreen()
+{
+    gameScreen = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(gameScreen);
+
+    backgroundLabel = new QLabel();
+    backgroundLabel->setAlignment(Qt::AlignCenter);
+    layout->addWidget(backgroundLabel);
+
+    characterLabel = new QLabel();
+    characterLabel->setAlignment(Qt::AlignCenter);
+    layout->addWidget(characterLabel);
+
     textLabel = new QLabel();
     textLabel->setWordWrap(true);
-    textLabel->setStyleSheet("font-size: 14px; padding: 10px;");
     textLabel->setAlignment(Qt::AlignCenter);
+    textLabel->setStyleSheet("font-size: 18px; color: white; background-color: rgba(0,0,0,0.7); padding: 20px;");
+    layout->addWidget(textLabel);
 
-    // Create choices layout
     choicesLayout = new QVBoxLayout();
+    layout->addLayout(choicesLayout);
 
-    // Add widgets to main layout
-    mainLayout->addWidget(backgroundView);
-    mainLayout->addWidget(characterView);
-    mainLayout->addWidget(textLabel);
-    mainLayout->addLayout(choicesLayout);
-    mainLayout->addStretch();
-
-    // Set central widget
-    setCentralWidget(centralWidget);
+    stack->addWidget(gameScreen);
 }
 
-void RomanceClub::loadStory()
+void RomanceClub::setupEndingScreen()
+{
+    endingScreen = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(endingScreen);
+
+    endingBackground = new QLabel();
+    endingBackground->setAlignment(Qt::AlignCenter);
+    layout->addWidget(endingBackground);
+
+    endingText = new QLabel();
+    endingText->setWordWrap(true);
+    endingText->setAlignment(Qt::AlignCenter);
+    endingText->setStyleSheet("font-size: 24px; color: white; background-color: rgba(0,0,0,0.7); padding: 30px;");
+
+    restartButton = new QPushButton("Начать");
+    restartButton->setStyleSheet(
+        "QPushButton {"
+        "   font-size: 20px;"
+        "   background-color: #3498db;"
+        "   color: white;"
+        "   padding: 10px 20px;"
+        "   border-radius: 5px;"
+        "}"
+        );
+    connect(restartButton, &QPushButton::clicked, this, &RomanceClub::restartGame);
+
+    layout->addWidget(endingText);
+    layout->addWidget(restartButton, 0, Qt::AlignCenter);
+
+    stack->addWidget(endingScreen);
+}
+
+void RomanceClub::loadGameData()
 {
     QFile file(":/story.json");
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Could not open story file:" << file.errorString();
+    if (!file.open(QIODevice::ReadOnly)) return;
+
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    storyScenes = doc.array();
+}
+
+void RomanceClub::startGame()
+{
+    currentSceneIndex = 0;
+    stack->setCurrentWidget(gameScreen);
+    showNextScene();
+}
+
+void RomanceClub::showNextScene()
+{
+    if (currentSceneIndex >= storyScenes.size()) {
+        // Определяем концовку по последнему выбору
+        showEnding(true); // В реальном проекте передавайте реальный результат
         return;
     }
 
-    QByteArray data = file.readAll();
-    QJsonDocument doc(QJsonDocument::fromJson(data));
-    if (doc.isNull()) {
-        qWarning() << "Invalid JSON file";
-        return;
-    }
-    scenes = doc.object()["scenes"].toArray();
-}
+    QJsonObject scene = storyScenes[currentSceneIndex].toObject();
 
-void RomanceClub::start()
-{
-    showScene("start");
-}
+    // Установка фона
+    QString bgImage = ":/images/backgrounds/" + scene["background"].toString() + ".png";
+    backgroundLabel->setPixmap(QPixmap(bgImage).scaled(size(), Qt::KeepAspectRatioByExpanding));
 
-void RomanceClub::showScene(const QString &sceneId)
-{
-    currentScene = findSceneById(sceneId);
-    if (currentScene.isEmpty()) {
-        qWarning() << "Scene not found:" << sceneId;
-        return;
-    }
+    // Установка персонажа
+    QString charImage = ":/images/characters/" + scene["character"].toString() + ".png";
+    characterLabel->setPixmap(QPixmap(charImage).scaledToHeight(500));
 
-    // Display scene text
-    textLabel->setText(currentScene["text"].toString());
+    // Установка текста
+    textLabel->setText(scene["text"].toString());
 
-    // Clear previous choices
-    clearChoices();
-
-    // Add new choices
-    QJsonArray choices = currentScene["choices"].toArray();
-    for (int i = 0; i < choices.size(); ++i) {
-        QJsonObject choice = choices[i].toObject();
-        QPushButton *button = new QPushButton(choice["text"].toString());
-        connect(button, &QPushButton::clicked, this, [this, i]() { handleChoice(i); });
-        choicesLayout->addWidget(button);
-    }
-
-    // Set background image based on scene
-    QString bgImage;
-    if (sceneId == "start" || sceneId == "scream" || sceneId == "fight_back") {
-        bgImage = ":/images/backgrounds/street.jpg";
-    } else if (sceneId == "surrender" || sceneId == "struggle_again" ||
-               sceneId == "allahverdi_help" || sceneId == "warn_allahverdi") {
-        bgImage = ":/images/backgrounds/room.jpg";
-    } else if (sceneId == "run_away" || sceneId == "give_up" ||
-               sceneId == "escape_with_leyla" || sceneId == "fight_atilla") {
-        bgImage = ":/images/backgrounds/car.jpg";
-    } else if (sceneId == "grief_escape" || sceneId == "bad_end_drown") {
-        bgImage = ":/images/backgrounds/sea.jpg";
-    } else if (sceneId == "foreign_start" || sceneId == "trap_atilla" ||
-               sceneId == "bad_end_escape" || sceneId == "good_ending") {
-        bgImage = ":/images/backgrounds/wedding.jpg";
-    }
-
-    if (!bgImage.isEmpty()) {
-        backgroundScene->clear();
-        QPixmap bgPixmap(bgImage);
-        if (!bgPixmap.isNull()) {
-            backgroundScene->addPixmap(bgPixmap.scaled(backgroundView->width(), backgroundView->height(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
-        } else {
-            qWarning() << "Failed to load background image:" << bgImage;
-        }
-    }
-
-    // Set character image based on scene
-    QString charImage;
-    if (sceneId == "start" || sceneId == "scream" || sceneId == "fight_back") {
-        charImage = ":/images/characters/attila.png";
-    } else if (sceneId.contains("allahverdi")) {
-        charImage = ":/images/characters/allahverdi.png";
-    } else if (sceneId.contains("leyla")) {
-        charImage = ":/images/characters/leyla.png";
-    } else if (sceneId.contains("rauf")) {
-        charImage = ":/images/characters/rauf.png";
-    } else {
-        charImage = ":/images/characters/fatima.png";
-    }
-
-    characterScene->clear();
-    QPixmap charPixmap(charImage);
-    if (!charPixmap.isNull()) {
-        characterScene->addPixmap(charPixmap.scaled(characterView->width(), characterView->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    } else {
-        qWarning() << "Failed to load character image:" << charImage;
-    }
-}
-
-void RomanceClub::handleChoice(int index)
-{
-    QJsonArray choices = currentScene["choices"].toArray();
-    if (index >= 0 && index < choices.size()) {
-        QJsonObject choice = choices[index].toObject();
-        QString nextSceneId = choice["next_scene"].toString();
-        showScene(nextSceneId);
-    }
-}
-
-void RomanceClub::clearChoices()
-{
+    // Очистка предыдущих выборов
     QLayoutItem *item;
-    while ((item = choicesLayout->takeAt(0)) != nullptr) {
+    while ((item = choicesLayout->takeAt(0))) {
         delete item->widget();
         delete item;
     }
+
+    // Добавление новых выборов
+    QJsonArray choices = scene["choices"].toArray();
+    for (int i = 0; i < choices.size(); ++i) {
+        QPushButton *btn = new QPushButton(choices[i].toString());
+        btn->setProperty("choiceIndex", i);
+        connect(btn, &QPushButton::clicked, this, [this, i]() { makeChoice(i); });
+        choicesLayout->addWidget(btn);
+    }
+
+    currentSceneIndex++;
 }
 
-QJsonObject RomanceClub::findSceneById(const QString &id)
+void RomanceClub::makeChoice(int choiceIndex)
 {
-    for (const QJsonValue &sceneValue : scenes) {
-        QJsonObject scene = sceneValue.toObject();
-        if (scene["id"].toString() == id) {
-            return scene;
-        }
+    // В реальном проекте здесь должна быть логика определения концовки
+    bool isGoodEnding = (choiceIndex == 0); // Пример
+
+    if (currentSceneIndex == storyScenes.size() - 1) {
+        showEnding(isGoodEnding);
+    } else {
+        showNextScene();
     }
-    return QJsonObject();
+}
+
+void RomanceClub::showEnding(bool isGoodEnding)
+{
+    if (isGoodEnding) {
+        endingBackground->setPixmap(QPixmap(":/images/backgrounds/wedding.jpg"));
+        endingText->setText("Поздравляем! Вы смогли дойти до счастливого конца");
+    } else {
+        endingBackground->setPixmap(QPixmap(":/images/backgrounds/sea.jpg"));
+        endingText->setText("Новелла закончилась... Возможно, повезет в следующей жизни");
+    }
+
+    stack->setCurrentWidget(endingScreen);
+}
+
+void RomanceClub::restartGame()
+{
+    stack->setCurrentWidget(welcomeScreen);
 }
