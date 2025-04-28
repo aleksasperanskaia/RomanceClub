@@ -2,17 +2,12 @@
 #define ROMANCECLUB_H
 
 #include <QMainWindow>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsPixmapItem>
-#include <QJsonDocument>
-#include <QJsonObject>
+#include <QStackedWidget>
 #include <QJsonArray>
-#include <QFile>
-#include <QPushButton>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+
+class QLabel;
+class QPushButton;
+class QVBoxLayout;
 
 class RomanceClub : public QMainWindow
 {
@@ -20,29 +15,38 @@ class RomanceClub : public QMainWindow
 
 public:
     RomanceClub(QWidget *parent = nullptr);
-    void loadStory();
-    void start();
-    void showScene(const QString &sceneId);
 
 private slots:
-    void handleChoice(int index);
+    void startGame();
+    void showNextScene();
+    void makeChoice(int choiceIndex);
+    void showEnding(bool isGoodEnding);
+    void restartGame();
 
 private:
-    QGraphicsScene *backgroundScene;
-    QGraphicsView *backgroundView;
-    QGraphicsScene *characterScene;
-    QGraphicsView *characterView;
+    void setupWelcomeScreen();
+    void setupGameScreen();
+    void setupEndingScreen();
+    void loadGameData();
+
+    QStackedWidget *stack;
+    QWidget *welcomeScreen;
+    QWidget *gameScreen;
+    QWidget *endingScreen;
+
+    // Game screen
+    QLabel *backgroundLabel;
+    QLabel *characterLabel;
     QLabel *textLabel;
-    QVBoxLayout *mainLayout;
-    QWidget *centralWidget;
     QVBoxLayout *choicesLayout;
 
-    QJsonArray scenes;
-    QJsonObject currentScene;
+    // Ending screen
+    QLabel *endingBackground;
+    QLabel *endingText;
+    QPushButton *restartButton;
 
-    void clearChoices();
-    void setupUI();
-    QJsonObject findSceneById(const QString &id);
+    QJsonArray storyScenes;
+    int currentSceneIndex = 0;
 };
 
 #endif // ROMANCECLUB_H
