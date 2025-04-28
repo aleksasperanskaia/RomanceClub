@@ -135,7 +135,7 @@ void RomanceClub::showScene(const QString &sceneId)
     } else if (sceneId.contains("rauf")) {
         charImage = ":/images/characters/rauf.png";
     } else {
-        charImage = ":/images/characters/farima.png";
+        charImage = ":/images/characters/fatima.png";
     }
 
     characterScene->clear();
