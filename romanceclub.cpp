@@ -127,15 +127,15 @@ void RomanceClub::showScene(const QString &sceneId)
     // Set character image based on scene
     QString charImage;
     if (sceneId == "start" || sceneId == "scream" || sceneId == "fight_back") {
-        charImage = ":/images/characters/attila.jpg";
+        charImage = ":/images/characters/attila.png";
     } else if (sceneId.contains("allahverdi")) {
-        charImage = ":/images/characters/allahverdi.jpg";
+        charImage = ":/images/characters/allahverdi.png";
     } else if (sceneId.contains("leyla")) {
-        charImage = ":/images/characters/leyla.jpg";
+        charImage = ":/images/characters/leyla.png";
     } else if (sceneId.contains("rauf")) {
-        charImage = ":/images/characters/rauf.jpg";
+        charImage = ":/images/characters/rauf.png";
     } else {
-        charImage = ":/images/characters/farima.jpg";
+        charImage = ":/images/characters/farima.png";
     }
 
     characterScene->clear();
