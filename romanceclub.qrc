@@ -3,11 +3,12 @@
         <file>story.json</file>
     </qresource>
     <qresource prefix="/images">
-        <file>backgrounds/car.jpg</file>
-        <file>backgrounds/room.jpg</file>
-        <file>backgrounds/sea.jpg</file>
-        <file>backgrounds/street.jpg</file>
-        <file>backgrounds/wedding.jpg</file>
+        <file>backgrounds/car.png</file>
+        <file>backgrounds/room.png</file>
+        <file>backgrounds/sea.png</file>
+        <file>backgrounds/street.png</file>
+        <file>backgrounds/wedding.png</file>
+        <file>backgrounds/welcome.png</file>
         <file>characters/allahverdi.png</file>
         <file>characters/attila.png</file>
         <file>characters/fatima.png</file>
