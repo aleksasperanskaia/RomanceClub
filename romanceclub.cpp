@@ -10,10 +10,14 @@
 #include <QGraphicsOpacityEffect>
 #include <QEasingCurve>
 #include <QPropertyAnimation>
+#include <QDebug>
+#include <QPixmap>
+#include <QStackedWidget>
+
 
 RomanceClub::RomanceClub(QWidget *parent) : QMainWindow(parent)
 {
-    setWindowTitle("Добро пожаловать в Азербайджаснкий Romance Club");
+    setWindowTitle("Добро пожаловать в Азербайджанский Romance Club");
     resize(1024, 768);
 
     stack = new QStackedWidget(this);
@@ -26,23 +30,27 @@ RomanceClub::RomanceClub(QWidget *parent) : QMainWindow(parent)
     loadGameData();
 }
 
+RomanceClub::~RomanceClub()
+{
+}
+
 void RomanceClub::setupWelcomeScreen()
 {
     welcomeScreen = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(welcomeScreen);
 
     QLabel *welcomeImage = new QLabel();
-    welcomeImage->setPixmap(QPixmap(":/images/backgrounds/welcome.png").scaled(800, 450, Qt::KeepAspectRatio));
+    welcomeImage->setPixmap(QPixmap(":/images/backgrounds/street.png").scaled(800, 450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     welcomeImage->setAlignment(Qt::AlignCenter);
 
     QPushButton *startButton = new QPushButton("Начать");
     startButton->setStyleSheet(
         "QPushButton {"
-        "   font-size: 24px;"
-        "   background-color: #e74c3c;"
-        "   color: white;"
-        "   padding: 15px 30px;"
-        "   border-radius: 10px;"
+        " font-size: 24px;"
+        " background-color: #e74c3c;"
+        " color: white;"
+        " padding: 15px 30px;"
+        " border-radius: 10px;"
         "}"
         );
     connect(startButton, &QPushButton::clicked, this, &RomanceClub::startGame);
@@ -92,14 +100,14 @@ void RomanceClub::setupEndingScreen()
     endingText->setAlignment(Qt::AlignCenter);
     endingText->setStyleSheet("font-size: 24px; color: white; background-color: rgba(0,0,0,0.7); padding: 30px;");
 
-    restartButton = new QPushButton("Начать");
+    restartButton = new QPushButton("Начать сначала");
     restartButton->setStyleSheet(
         "QPushButton {"
-        "   font-size: 20px;"
-        "   background-color: #3498db;"
-        "   color: white;"
-        "   padding: 10px 20px;"
-        "   border-radius: 5px;"
+        " font-size: 20px;"
+        " background-color: #3498db;"
+        " color: white;"
+        " padding: 10px 20px;"
+        " border-radius: 5px;"
         "}"
         );
     connect(restartButton, &QPushButton::clicked, this, &RomanceClub::restartGame);
@@ -113,10 +121,21 @@ void RomanceClub::setupEndingScreen()
 void RomanceClub::loadGameData()
 {
     QFile file(":/story.json");
-    if (!file.open(QIODevice::ReadOnly)) return;
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Failed to open story.json";
+        return;
+    }
 
-    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    QByteArray data = file.readAll();
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+
+    if (doc.isNull()) {
+        qDebug() << "Invalid JSON format";
+        return;
+    }
+
     storyScenes = doc.array();
+    qDebug() << "Loaded" << storyScenes.size() << "scenes";
 }
 
 void RomanceClub::startGame()
@@ -128,52 +147,47 @@ void RomanceClub::startGame()
 
 void RomanceClub::showNextScene()
 {
-    if (currentSceneIndex >= storyScenes.size()) {
-        // Определяем концовку по последнему выбору
-        showEnding(true); // В реальном проекте передавайте реальный результат
-        return;
+    if (currentSceneIndex < storyScenes.size()) {
+        QJsonObject scene = storyScenes[currentSceneIndex].toObject();
+
+        // Set background
+        QString bgImage = ":/images/backgrounds/" + scene["background"].toString() + ".png";
+        backgroundLabel->setPixmap(QPixmap(bgImage).scaled(size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
+
+        // Set character
+        QString charImage = ":/images/characters/" + scene["character"].toString() + ".png";
+        characterLabel->setPixmap(QPixmap(charImage).scaledToHeight(500, Qt::SmoothTransformation));
+
+        // Set text
+        textLabel->setText(scene["text"].toString());
+
+        // Clear previous choices
+        QLayoutItem* item;
+        while ((item = choicesLayout->takeAt(0))) {
+            delete item->widget();
+            delete item;
+        }
+
+        // Add new choices
+        QJsonArray choices = scene["choices"].toArray();
+        for (int i = 0; i < choices.size(); ++i) {
+            QPushButton* btn = new QPushButton(choices[i].toString());
+            btn->setProperty("choiceIndex", i);
+            connect(btn, &QPushButton::clicked, this, [this, i]() { makeChoice(i); });
+            choicesLayout->addWidget(btn);
+        }
+    } else {
+        showEnding(true); // Default to good ending if no choices made
     }
-
-    QJsonObject scene = storyScenes[currentSceneIndex].toObject();
-
-    // Установка фона
-    QString bgImage = ":/images/backgrounds/" + scene["background"].toString() + ".png";
-    backgroundLabel->setPixmap(QPixmap(bgImage).scaled(size(), Qt::KeepAspectRatioByExpanding));
-
-    // Установка персонажа
-    QString charImage = ":/images/characters/" + scene["character"].toString() + ".png";
-    characterLabel->setPixmap(QPixmap(charImage).scaledToHeight(500));
-
-    // Установка текста
-    textLabel->setText(scene["text"].toString());
-
-    // Очистка предыдущих выборов
-    QLayoutItem *item;
-    while ((item = choicesLayout->takeAt(0))) {
-        delete item->widget();
-        delete item;
-    }
-
-    // Добавление новых выборов
-    QJsonArray choices = scene["choices"].toArray();
-    for (int i = 0; i < choices.size(); ++i) {
-        QPushButton *btn = new QPushButton(choices[i].toString());
-        btn->setProperty("choiceIndex", i);
-        connect(btn, &QPushButton::clicked, this, [this, i]() { makeChoice(i); });
-        choicesLayout->addWidget(btn);
-    }
-
-    currentSceneIndex++;
 }
 
 void RomanceClub::makeChoice(int choiceIndex)
 {
-    // В реальном проекте здесь должна быть логика определения концовки
-    bool isGoodEnding = (choiceIndex == 0); // Пример
-
+    // For demo purposes, first choice leads to good ending
     if (currentSceneIndex == storyScenes.size() - 1) {
-        showEnding(isGoodEnding);
+        showEnding(choiceIndex == 0);
     } else {
+        currentSceneIndex++;
         showNextScene();
     }
 }
@@ -181,11 +195,11 @@ void RomanceClub::makeChoice(int choiceIndex)
 void RomanceClub::showEnding(bool isGoodEnding)
 {
     if (isGoodEnding) {
-        endingBackground->setPixmap(QPixmap(":/images/backgrounds/wedding.jpg"));
-        endingText->setText("Поздравляем! Вы смогли дойти до счастливого конца");
+        endingBackground->setPixmap(QPixmap(":/images/backgrounds/wedding.jpg").scaled(size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
+        endingText->setText("Поздравляем! Вы дошли до хорошего конца!");
     } else {
-        endingBackground->setPixmap(QPixmap(":/images/backgrounds/sea.jpg"));
-        endingText->setText("Новелла закончилась... Возможно, повезет в следующей жизни");
+        endingBackground->setPixmap(QPixmap(":/images/backgrounds/sea.jpg").scaled(size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
+        endingText->setText("Конец... Повезет в следующей жизни");
     }
 
     stack->setCurrentWidget(endingScreen);
