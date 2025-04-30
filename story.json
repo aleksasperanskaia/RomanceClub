@@ -17,7 +17,7 @@
     },
     "leyla.png": {
       "name": "Лейла",
-      "description": "Моя лучшая подруга. Её брат — Аллахверди. Где она сейчас? Наверное, ищет меня..."
+      "description": "Моя лучшая подруга. Где она сейчас? Наверное, ищет меня..."
     },
     "rauf.png": {
       "name": "Рауф",
@@ -56,7 +56,8 @@
           "thoughts": "Если разобьёмся, я хотя бы смогу убежать...",
           "consequences": {
             "anger": 2,
-            "pain": 1
+            "pain": 1,
+            "faith": 2
           },
           "nextScene": "car_crash"
         },
@@ -84,7 +85,7 @@
       "id": "car_crash",
       "title": "Авария",
       "text": "Машина резко дергается в сторону, вылетает на обочину и врезается в дерево. Атилла теряет управление. Голова кружится, но я должна бежать, пока он без сознания...",
-      "background": "street.png",
+      "background": "les.png",
       "character": "fatima.png",
       "nextScene": "escape_attempt"
     },
@@ -92,7 +93,7 @@
       "id": "escape_attempt",
       "title": "Попытка побега",
       "text": "Выбираюсь из разбитой машины. Темный лес, ни души вокруг. Бегу куда глаза глядят, но вдруг слышу за спиной его голос: 'Куда ты, дурочка?!' Он догоняет меня...",
-      "background": "street.png",
+      "background": "les.png",
       "character": "attila.png",
       "nextScene": "safe_house_arrival"
     },
@@ -100,7 +101,7 @@
       "id": "safe_house_arrival",
       "title": "Логово",
       "text": "Старый дачный дом. Скрип дверей. Запах плесени. Атилла толкает меня в комнату с зарешеченным окном. 'Здесь ты научишься любить меня', — шепчет он. Вдруг шаги... В дверях появляется Аллахверди. Его глаза полны ужаса.",
-      "background": "room.png",
+      "background": "home.png",
       "character": "alahverdi.png",
       "nextScene": "allahverdi_choice"
     },
@@ -108,8 +109,8 @@
       "id": "allahverdi_choice",
       "title": "Молчаливый диалог",
       "text": "Наши взгляды встречаются. В его глазах я вижу то, что не видела раньше — боль и решимость. Он может стать моим спасением... или ещё одним тюремщиком.",
-      "background": "room.png",
-      "character": "alahverdi.png",
+      "background": "home.png",
+      "character": "allahverdi.png",
       "choices": [
         {
           "id": "beg",
@@ -125,7 +126,8 @@
           "text": "Обвинить его: 'Ты такой же маньяк!'",
           "thoughts": "Если он действительно хороший — докажет это!",
           "consequences": {
-            "guilt": 1
+            "guilt": 1,
+            "faith": 3
           },
           "nextScene": "allahverdi_conflict"
         }
@@ -135,15 +137,15 @@
       "id": "secret_help",
       "title": "Тайная помощь",
       "text": "Аллахверди незаметно суёт мне в руку записку, когда Атилла отвернулся. 'Лейла знает. Жди сигнала', — написано дрожащим почерком. Сердце замирает от надежды...",
-      "background": "room.png",
-      "character": "alahverdi.png",
+      "background": "home.png",
+      "character": "allahverdi.png",
       "nextScene": "waiting_period"
     },
     {
       "id": "allahverdi_conflict",
       "title": "Конфликт",
       "text": "Аллахверди бледнеет от моих слов. 'Ты действительно так думаешь?' — шепчет он. Атилла смеётся: 'Видишь? Она ненавидит всех нас!'",
-      "background": "room.png",
+      "background": "home.png",
       "character": "attila.png",
       "nextScene": "punishment"
     },
@@ -151,7 +153,7 @@
       "id": "waiting_period",
       "title": "Томительное ожидание",
       "text": "Проходит три дня. Атилла объявляет, что наша 'свадьба' состоится через неделю. Каждую ночь я слышу, как под окном кто-то ходит... Может быть, это Лейла?",
-      "background": "room.png",
+      "background": "home.png",
       "character": "fatima.png",
       "nextScene": "wedding_preparations"
     },
@@ -159,7 +161,7 @@
       "id": "punishment",
       "title": "Наказание",
       "text": "Атилла решает, что я должна быть наказана за 'непослушание'. Он приковывает меня к батарее на целые сутки без еды и воды. Аллахверди украдкой приносит мне стакан воды, но его глаза полны отчаяния...",
-      "background": "room.png",
+      "background": "home.png",
       "character": "attila.png",
       "nextScene": "wedding_preparations"
     },
@@ -167,7 +169,7 @@
       "id": "wedding_preparations",
       "title": "Подготовка к свадьбе",
       "text": "Атилла привозит белое платье. 'Через два дня ты станешь моей женой', — говорит он, поглаживая нож у меня на глазах. В его взгляде — безумие и одержимость.",
-      "background": "wedding.jpg",
+      "background": "wedding.png",
       "character": "attila.png",
       "nextScene": "wedding_escape"
     },
@@ -175,8 +177,8 @@
       "id": "wedding_escape",
       "title": "Свадебный побег",
       "text": "В день 'свадьбы' Атилла сияет. Внезапно свет гаснет. Чьи-то руки хватают меня за запястье — это Аллахверди! 'Бежим сейчас!' — его шёпот полон отчаяния. За спиной слышны крики Атиллы...",
-      "background": "wedding.jpg",
-      "character": "alahverdi.png",
+      "background": "wedding.png",
+      "character": "allahverdi.png",
       "choices": [
         {
           "id": "trust",
@@ -202,41 +204,41 @@
       "id": "final_escape",
       "title": "Последний рывок",
       "text": "Мы мчимся через лес к машине Рауфа. Атилла бежит за нами с пистолетом. Аллахверди толкает меня в машину: 'Езжай без меня!' — и разворачивается к преследователю...",
-      "background": "street.png",
+      "background": "les.png",
       "character": "rauf.png",
-      "nextScene": "good_ending"
+      "nextScene": "ending_good"
     },
     {
       "id": "tragic_end",
       "title": "Роковое решение",
       "text": "Вырываюсь и бегу в темноту. Но лес слишком густой, я быстро теряю ориентацию. Вдруг передо мной возникает Атилла... 'Я же говорил — ты никуда не убежишь', — шепчет он, доставая верёвку...",
-      "background": "street.png",
+      "background": "home.png",
       "character": "attila.png",
-      "nextScene": "bad_ending"
+      "nextScene": "ending_bad"
     }
   ],
   "endings": [
     {
-      "id": "good_ending",
+      "id": "ending_good",
       "title": "Новая жизнь",
       "description": "Вы смогли сбежать с помощью друзей",
-      "background": "sea.png",
+      "background": "kafe.png",
       "text": "Проходит год. Я живу в другом городе под новым именем. Сегодня получила письмо — Аллахверди выжил после той ночи. Атилла в тюрьме. Впервые за долгое время я позволяю себе улыбнуться...",
       "characters": ["fatima.png"]
     },
     {
-      "id": "bad_ending",
+      "id": "ending_bad",
       "title": "Волны забвения",
       "description": "Побег не удался",
-      "background": "sea.png",
+      "background": "waves.png",
       "text": "Последнее, что я вижу — холодные волны Каспийского моря. Атилла слишком сильно затянул верёвку на шее... 'Теперь мы будем вместе навеки', — его последние слова, которые я слышу. Темнеет...",
       "characters": ["attila.png"]
     },
     {
-      "id": "secret_ending",
+      "id": "ending_secret",
       "title": "Месть",
       "description": "Вы решили бороться до конца",
-      "background": "room.png",
+      "background": "home.png",
       "text": "Нож в моей руке дрожит. Атилла лежит без сознания. 'Прости', — шепчу я, вспоминая все муки. Выстрел глохнет в подушке. Теперь я свободна, но какой ценой...",
       "characters": ["fatima.png"],
       "unlockCondition": {
