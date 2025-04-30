@@ -1,3 +1,5 @@
+![Welcome21](https://github.com/user-attachments/assets/fce30d8f-8209-4947-9a95-dea848942f02)
+
 # Romance Club Visual Novel
  **Интерактивная визуальная новелла с ветвящимся сюжетом**
 
