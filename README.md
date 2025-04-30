@@ -22,12 +22,7 @@
 
 ### ⚙️ Сборка
 
-1. Клонируйте репозиторий:
-```bash
-git clone https://github.com/your-username/romance-club.git
-cd romance-club
-```
-
+1. Клонируйте репозиторий.
 2. Откройте romanceclub.pro в Qt Creator.
 3. Соберите и запустите проект.
 
