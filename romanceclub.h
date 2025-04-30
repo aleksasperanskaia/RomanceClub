@@ -15,6 +15,7 @@ class RomanceClub : public QMainWindow
 
 public:
     RomanceClub(QWidget *parent = nullptr);
+    ~RomanceClub();
 
 private slots:
     void startGame();
@@ -34,13 +35,11 @@ private:
     QWidget *gameScreen;
     QWidget *endingScreen;
 
-    // Game screen
     QLabel *backgroundLabel;
     QLabel *characterLabel;
     QLabel *textLabel;
     QVBoxLayout *choicesLayout;
 
-    // Ending screen
     QLabel *endingBackground;
     QLabel *endingText;
     QPushButton *restartButton;
