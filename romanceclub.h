@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QJsonArray>
+#include <QHash>
+#include <QSet>
 
 class QLabel;
 class QPushButton;
@@ -14,21 +16,24 @@ class RomanceClub : public QMainWindow
     Q_OBJECT
 
 public:
-    RomanceClub(QWidget *parent = nullptr);
+    explicit RomanceClub(QWidget *parent = nullptr);
     ~RomanceClub();
 
 private slots:
     void startGame();
     void showNextScene();
-    void makeChoice(int choiceIndex);
-    void showEnding(bool isGoodEnding);
+    void showEnding(const QJsonObject& ending);
     void restartGame();
 
 private:
+    QSet<QString> madeChoices;
+
     void setupWelcomeScreen();
     void setupGameScreen();
     void setupEndingScreen();
     void loadGameData();
+    QJsonObject findSceneById(const QString& sceneId);
+    void updateStats(const QJsonObject& consequences);
 
     QStackedWidget *stack;
     QWidget *welcomeScreen;
@@ -38,14 +43,19 @@ private:
     QLabel *backgroundLabel;
     QLabel *characterLabel;
     QLabel *textLabel;
+    QLabel *statsLabel;
     QVBoxLayout *choicesLayout;
 
     QLabel *endingBackground;
+    QLabel *endingTitle;
     QLabel *endingText;
     QPushButton *restartButton;
 
     QJsonArray storyScenes;
-    int currentSceneIndex = 0;
+    QJsonArray endings;
+    QString currentSceneId;
+    QHash<QString, QString> characterImages;
+    QHash<QString, int> stats;
 };
 
 #endif // ROMANCECLUB_H
