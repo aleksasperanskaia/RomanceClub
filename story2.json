@@ -1,0 +1,635 @@
+{
+  "gameTitle": "Похищенная душа",
+  "gameVersion": "2.2",
+  "narrationStyle": "first_person",
+  "characters": {
+    "fatima.png": {
+      "name": "Я (Фатима)",
+      "description": "21 год. Художница. Мечтала о выставке в Париже, но теперь борется за выживание. Имеет скрытую силу духа, о которой сама не подозревает."
+    },
+    "attila.png": {
+      "name": "Атилла",
+      "description": "Однокурсник с тёмным прошлым. Его одержимость Фатимой граничит с безумием. Имеет связи с криминалом."
+    },
+    "allahverdi.png": {
+      "name": "Аллахверди",
+      "description": "Тихий парень с твёрдыми принципами. Влюблён в Фатиму с 9 класса. Работает в автосервисе, что может помочь в побеге."
+    },
+    "leyla.png": {
+      "name": "Лейла",
+      "description": "Лучшая подруга Фатимы. Решительная и смелая. Умеет находить выход из сложных ситуаций."
+    },
+    "rauf.png": {
+      "name": "Рауф",
+      "description": "Старший брат Лейлы. Бывший военный. Может стать как угрозой, так и спасением."
+    },
+    "madina.png": {
+      "name": "Мадина",
+      "description": "Соседка Атиллы. Видела слишком много, но боится говорить."
+    }
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "title": "Последний день свободы",
+      "text": "Утро началось как обычно. Я спешила на лекцию, думая о предстоящей выставке. В кармане — билет в Париж. \n\nПоворот за угол — и вдруг чьи-то сильные руки хватают меня сзади. Знакомый голос шепчет: 'Я не мог больше ждать...' Это голос Атиллы. \n\nМешок на голове, удар — и мир гаснет.",
+      "background": "street.png",
+      "character": "fatima.png",
+      "choices": [
+        {
+          "id": "fight_back",
+          "text": "Яростно сопротивляться",
+          "consequences": {
+            "anger_attila": 2,
+            "strength": 1
+          },
+          "nextScene": "wake_up_room"
+        },
+        {
+          "id": "play_dead",
+          "text": "Притвориться без сознания",
+          "consequences": {
+            "cunning": 1
+          },
+          "nextScene": "wake_up_room"
+        },
+        {
+          "id": "drop_clue",
+          "text": "Уронить билет намеренно",
+          "consequences": {
+            "hope": 1
+          },
+          "nextScene": "wake_up_room"
+        }
+      ]
+    },
+    {
+      "id": "wake_up_room",
+      "title": "Проснуться в плену",
+      "text": "Я очнулась в маленькой комнате с зарешеченным окном. На столе — мои вещи, включая разорванный билет. Атилла сидит напротив, его глаза горят странным блеском.\n\n'Ты продержалась дольше, чем я ожидал' — он протягивает стакан воды. Его рука в свежих царапинах.",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "ask_about_leyla",
+          "text": "Где Лейла? Что ты с ней сделал?",
+          "consequences": {
+            "loyalty_leyla": 2,
+            "anger_attila": 1
+          },
+          "nextScene": "attila_reaction"
+        },
+        {
+          "id": "pretend_submit",
+          "text": "Молча принять воду",
+          "consequences": {
+            "cunning": 1,
+            "trust_attila": 1
+          },
+          "nextScene": "attila_confession"
+        },
+        {
+          "id": "throw_water",
+          "text": "Выплеснуть воду в лицо",
+          "consequences": {
+            "anger_attila": 2
+          },
+          "nextScene": "punishment"
+        }
+      ]
+    },
+    {
+      "id": "attila_reaction",
+      "title": "Реакция Атиллы",
+      "text": "Атилла хмурится: 'Ты всё ещё думаешь о ней? Лейла в безопасности... пока ты ведёшь себя хорошо.' \n\nОн резко встаёт, его тень нависает над тобой. 'Но если попытаешься что-то... я не ручаюсь.'",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "challenge_him",
+          "text": "Ты не посмеешь её тронуть!",
+          "consequences": {
+            "anger_attila": 2
+          },
+          "nextScene": "punishment"
+        },
+        {
+          "id": "change_topic",
+          "text": "Почему ты это сделал?",
+          "consequences": {
+            "trust_attila": 1
+          },
+          "nextScene": "attila_confession"
+        },
+        {
+          "id": "notice_details",
+          "text": "Заметить следы крови на его рукаве",
+          "consequences": {
+            "observation": 1
+          },
+          "nextScene": "hidden_clue"
+        }
+      ]
+    },
+    {
+      "id": "attila_confession",
+      "title": "Признание Атиллы",
+      "text": "Атилла медленно опускается на стул перед тобой, его пальцы нервно барабанят по столу.\n\n'Ты думаешь, я монстр? Но я... я просто не мог больше ждать. Ты всегда смотрела сквозь меня, как будто я пустое место.'\n\nОн резко встаёт, подходит к окну:\n\n'А этот Аллахверди... он вообще ничего не понимает в искусстве! Как он смеет говорить с тобой о твоих картинах?!'\n\nЕго голос срывается. Впервые ты видишь в нём не только агрессию, но и боль.",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "anger_response",
+          "text": "Ты свел меня с ума годами!",
+          "consequences": {
+            "anger_attila": 2
+          },
+          "nextScene": "punishment"
+        },
+        {
+          "id": "soft_response",
+          "text": "Я... я не знала, что ты так чувствуешь.",
+          "consequences": {
+            "trust_attila": 1
+          },
+          "nextScene": "attila_softens"
+        },
+        {
+          "id": "silent_observation",
+          "text": "Молчать, изучая его реакцию",
+          "consequences": {
+            "observation": 1
+          },
+          "nextScene": "hidden_clue"
+        }
+      ]
+    },
+    {
+      "id": "punishment",
+      "title": "Наказание",
+      "text": "'Ты оставила мне выбор?' — Атилла хватает тебя за руку и толкает в угол. На стене — царапины, оставленные кем-то до тебя.\n\n'Я хотел быть добрым. Но ты... ты всегда доводишь меня до крайности.'\n\nОн достает нож и проводит лезвием по стене, оставляя свежую отметину.\n\n'Запомни: следующий раз будет больнее.'",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "fight_back",
+          "text": "Попытаться ударить его",
+          "consequences": {
+            "strength": 1,
+            "health": -2
+          },
+          "nextScene": "punishment_fight"
+        },
+        {
+          "id": "pretend_broken",
+          "text": "Расплакаться, притворившись сломленной",
+          "consequences": {
+            "cunning": 1
+          },
+          "nextScene": "waiting_period"
+        },
+        {
+          "id": "provoke",
+          "text": "Шептать имя Аллахверди",
+          "consequences": {
+            "anger_attila": 3
+          },
+          "nextScene": "extreme_punishment"
+        }
+      ]
+    },
+    {
+      "id": "punishment_fight",
+      "title": "Последствия сопротивления",
+      "text": "Твоя попытка ударить его только разозлила Атиллу ещё больше. Он с силой бьёт тебя в живот, и ты падаешь на пол, теряя дыхание.\n\n'Глупая девчонка! Ты думала, что сможешь победить меня?' — он плюёт на пол рядом с тобой. — 'Теперь ты останешься здесь без воды до завтра.'",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "accept_punishment",
+          "text": "Молча принять наказание",
+          "consequences": {
+            "health": -1
+          },
+          "nextScene": "waiting_period"
+        }
+      ]
+    },
+    {
+      "id": "extreme_punishment",
+      "title": "Грани безумия",
+      "text": "Атилла бьёт тебя кулаком в живот, и ты падаешь на колени. 'Ты думала, что можешь издеваться надо мной?!' — он хватает тебя за волосы. 'Теперь ты увидишь, что случилось с Лейлой...' Он тянет тебя к люку в полу.",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "resist_fiercely",
+          "text": "Отчаянно сопротивляться",
+          "consequences": {
+            "strength": 2,
+            "health": -2
+          },
+          "nextScene": "punishment_fight"
+        },
+        {
+          "id": "go_limp",
+          "text": "Обмякнуть в его руках",
+          "consequences": {
+            "cunning": 1
+          },
+          "nextScene": "hidden_clue"
+        }
+      ]
+    },
+    {
+      "id": "waiting_period",
+      "title": "Ожидание",
+      "text": "Атилла, удовлетворённый твоей покорностью, уходит, оставив тебя одну. В комнате царит тишина, прерываемая только звуками с улицы. Ты понимаешь, что у тебя есть немного времени, чтобы осмотреться и подумать о плане побега.",
+      "background": "home.png",
+      "character": "fatima.png",
+      "choices": [
+        {
+          "id": "search_room",
+          "text": "Осмотреть комнату",
+          "consequences": {
+            "observation": 1
+          },
+          "nextScene": "hidden_clue"
+        },
+        {
+          "id": "rest",
+          "text": "Отдохнуть и набраться сил",
+          "consequences": {
+            "health": 1
+          },
+          "nextScene": "allahverdi_nighttalk"
+        }
+      ]
+    },
+    {
+      "id": "hidden_clue",
+      "title": "Подсказка в деталях",
+      "text": "Кровь на рукаве свежая, но рана на его руке уже затянулась. Значит, кровь чужая... Чья? На полу у двери — обрывок ткани, похожий на шарф Лейлы. Атилла не заметил, как ты это увидела.",
+      "background": "home.png",
+      "character": "fatima.png",
+      "choices": [
+        {
+          "id": "hide_clue",
+          "text": "Спрятать улику",
+          "consequences": {
+            "cunning": 2
+          },
+          "nextScene": "allahverdi_nighttalk"
+        },
+        {
+          "id": "confront_attila",
+          "text": "Это кровь Лейлы?!",
+          "consequences": {
+            "anger_attila": 3
+          },
+          "nextScene": "punishment"
+        }
+      ]
+    },
+    {
+      "id": "allahverdi_nighttalk",
+      "title": "Ночной визит",
+      "text": "Тихое постукивание в дверь. Аллахверди прокрался сюда, рискуя всем. 'Фатима, я знаю, где Лейла. У меня есть план... но нам нужно действовать быстро. Атилла ушёл, но ненадолго.' \n\nОн протягивает тебе телефон: 'Твой билет... он не пропал даром.'",
+      "background": "night.png",
+      "character": "allahverdi.png",
+      "choices": [
+        {
+          "id": "take_risk",
+          "text": "Я готова. Давай сделаем это сейчас!",
+          "consequences": {
+            "love_alahverdi": 2,
+            "courage": 2
+          },
+          "nextScene": "escape_plan"
+        },
+        {
+          "id": "ask_more",
+          "text": "Расскажи всё подробнее",
+          "consequences": {
+            "love_alahverdi": 1
+          },
+          "nextScene": "allahverdi_help_plan"
+        }
+      ]
+    },
+    {
+      "id": "escape_plan",
+      "title": "План побега",
+      "text": "Аллахверди быстро объясняет маршрут: 'Через черный ход мы выйдем к гаражу. Рауф ждёт нас там с машиной. Главное — не шуметь и держаться вместе.' Он крепко сжимает твою руку: 'Готова?'",
+      "background": "night.png",
+      "character": "allahverdi.png",
+      "choices": [
+        {
+          "id": "agree_immediately",
+          "text": "Да, пошли!",
+          "consequences": {
+            "courage": 2
+          },
+          "nextScene": "leyla_rescue"
+        },
+        {
+          "id": "ask_about_weapon",
+          "text": "У тебя есть оружие?",
+          "consequences": {
+            "wisdom": 1
+          },
+          "nextScene": "allahverdi_help_plan"
+        }
+      ]
+    },
+    {
+      "id": "allahverdi_help_plan",
+      "title": "План Аллахверди",
+      "text": "'Рауф ждёт нас у старого гаража. У него есть машина и оружие. Но...' — Аллахверди замолкает, услышав шум. — 'Нам нужно отвлечь Атиллу. Мадина сказала, что он проверяет подвал каждые 2 часа.'\n\nОн кладёт тебе в руку отвёртку:\n\n'Спрячь это. Если что-то пойдёт не так...'",
+      "background": "night.png",
+      "character": "allahverdi.png",
+      "choices": [
+        {
+          "id": "ready_now",
+          "text": "Я готова. Давай сейчас!",
+          "consequences": {
+            "courage": 2
+          },
+          "nextScene": "escape_plan"
+        },
+        {
+          "id": "demand_leyla",
+          "text": "Где Лейла? Я не уйду без неё!",
+          "consequences": {
+            "loyalty_leyla": 2
+          },
+          "nextScene": "leyla_rescue"
+        }
+      ]
+    },
+    {
+      "id": "leyla_rescue",
+      "title": "Спасение Лейлы",
+      "text": "Вы пробираетесь через тёмный коридор. Аллахверди шепчет: 'Она в подвале'. \n\nВнезапно раздаётся шум — кто-то идёт! Аллахверди толкает тебя в нишу: 'Жди здесь'. Он уходит отвлекать внимание.",
+      "background": "dark_corridor.png",
+      "character": "leyla.png",
+      "choices": [
+        {
+          "id": "stay_hidden",
+          "text": "Остаться в укрытии",
+          "consequences": {
+            "cunning": 1
+          },
+          "nextScene": "leyla_found"
+        },
+        {
+          "id": "follow_him",
+          "text": "Тихо следовать за ним",
+          "consequences": {
+            "courage": 2
+          },
+          "nextScene": "see_rauf"
+        }
+      ]
+    },
+    {
+      "id": "leyla_found",
+      "title": "Лейла найдена",
+      "text": "Лейла бросается к тебе, её пальцы впиваются в твои плечи:\n\n'Фатима! Я знала, что ты жива... Он говорил, что убил тебя!'\n\nЗа её спиной — окровавленная тряпка и пустая бутылка воды. Она шепчет:\n\n'Он не один. У него есть сообщник... Кто-то из университета.'",
+      "background": "basement.png",
+      "character": "leyla.png",
+      "choices": [
+        {
+          "id": "ask_name",
+          "text": "Кто?!",
+          "consequences": {
+            "knowledge": 1
+          },
+          "nextScene": "betrayal_revealed"
+        },
+        {
+          "id": "hug_her",
+          "text": "Обнять её, не спрашивая",
+          "consequences": {
+            "loyalty_leyla": 2
+          },
+          "nextScene": "escape_attempt"
+        }
+      ]
+    },
+    {
+      "id": "betrayal_revealed",
+      "title": "Предательство",
+      "text": "'Это Назим из нашей группы,' — шепчет Лейла. 'Он всегда завидовал твоему таланту... Атилла платил ему за информацию о тебе.' Ты вспоминаешь, как Назим 'случайно' оказывался рядом в последние месяцы.",
+      "background": "basement.png",
+      "character": "leyla.png",
+      "choices": [
+        {
+          "id": "focus_escape",
+          "text": "Сначала нужно выбраться отсюда",
+          "consequences": {
+            "wisdom": 1
+          },
+          "nextScene": "escape_attempt"
+        }
+      ]
+    },
+    {
+      "id": "escape_attempt",
+      "title": "Слабость Лейлы",
+      "text": "Лейла качает головой: 'Я... я не уверена, что смогу бежать.' Её нога перевязана окровавленной тканью. 'Иди без меня, найди помощь!' — она суёт тебе в руку смятый листок с адресом.",
+      "background": "basement.png",
+      "character": "leyla.png",
+      "choices": [
+        {
+          "id": "leave_her",
+          "text": "Пообещать вернуться с помощью",
+          "consequences": {
+            "loyalty_leyla": 1
+          },
+          "nextScene": "final_choice"
+        },
+        {
+          "id": "carry_her",
+          "text": "Попытаться нести её",
+          "consequences": {
+            "strength_check": true,
+            "loyalty_leyla": 2
+          },
+          "nextScene": "confrontation"
+        }
+      ]
+    },
+    {
+      "id": "see_rauf",
+      "title": "Неожиданный союзник",
+      "text": "Ты видишь, как Аллахверди разговаривает с... Рауфом! Брат Лейлы здесь! Он что-то передаёт Аллахверди — похоже на оружие. 'Где Фатима?' — сердито спрашивает Рауф.",
+      "background": "dark_corridor.png",
+      "character": "rauf.png",
+      "choices": [
+        {
+          "id": "reveal_yourself",
+          "text": "Выйти к ним",
+          "consequences": {
+            "trust_rauf": 2
+          },
+          "nextScene": "united_plan"
+        }
+      ]
+    },
+    {
+      "id": "united_plan",
+      "title": "Объединённый фронт",
+      "text": "Рауф раскладывает на полу схему дома: 'Аллахверди отвлечёт их у входа, Мадина откроет заднюю дверь, а мы с тобой выведем Лейлу.' Он смотрит на тебя: 'Готова?'",
+      "background": "basement.png",
+      "character": "rauf.png",
+      "choices": [
+        {
+          "id": "agree_plan",
+          "text": "Да, начинаем сейчас",
+          "consequences": {
+            "courage": 2
+          },
+          "nextScene": "confrontation"
+        }
+      ]
+    },
+    {
+      "id": "attila_softens",
+      "title": "Смягчение Атиллы",
+      "text": "Атилла замирает, его глаза теряют безумный блеск. 'Ты... ты действительно не знала?' Он опускает нож. 'Все эти годы я думал...' Вдруг снаружи раздаётся грохот — кто-то врывается в дом.",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "use_opportunity",
+          "text": "Воспользоваться моментом",
+          "consequences": {
+            "cunning": 2
+          },
+          "nextScene": "final_choice"
+        }
+      ]
+    },
+    {
+      "id": "confrontation",
+      "title": "Решающая схватка",
+      "text": "Атилла стоит перед тобой с ножом, его глаза безумны. 'Всё кончено, Фатима!' — кричит он. За его спиной ты видишь, как Рауф поднимает пистолет. Нужно действовать сейчас!",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "dive_left",
+          "text": "Броситься влево",
+          "consequences": {
+            "reflexes": 1
+          },
+          "nextScene": "final_choice"
+        },
+        {
+          "id": "grab_knife",
+          "text": "Попытаться выбить нож",
+          "consequences": {
+            "strength": 1
+          },
+          "nextScene": "final_choice"
+        }
+      ]
+    },
+    {
+      "id": "final_choice",
+      "title": "Развязка",
+      "text": "Атилла стоит перед тобой с пистолетом. Аллахверди ранен, Лейла держит его. Рауф и Мадина где-то сзади. 'Последний шанс, Фатима. Ты выбираешь меня или смерть для всех?' \n\nВ углу ты замечаешь открытый сейф с фотографиями... и странным флаконом.",
+      "background": "home.png",
+      "character": "attila.png",
+      "choices": [
+        {
+          "id": "choose_allahverdi",
+          "text": "Я люблю Аллахверди!",
+          "consequences": {
+            "love_alahverdi": 3
+          },
+          "nextScene": "ending_love_allahverdi"
+        },
+        {
+          "id": "pretend_surrender",
+          "text": "Притвориться сдающейся",
+          "consequences": {
+            "cunning": 2
+          },
+          "nextScene": "ending_smart_revenge"
+        },
+        {
+          "id": "grab_bottle",
+          "text": "Схватить подозрительный флакон",
+          "consequences": {
+            "risk": 2
+          },
+          "nextScene": "ending_dramatic"
+        },
+        {
+          "id": "attack_attila",
+          "text": "Броситься на Атиллу",
+          "consequences": {
+            "courage": 3
+          },
+          "nextScene": "ending_revenge"
+        }
+      ]
+    },
+    {
+      "id": "ending_all_die",
+      "title": "Пепел наших надежд",
+      "description": "Трагический финал",
+      "background": "ashes.png",
+      "text": "Выстрелы гремят один за другим...",
+      "characters": ["attila.png", "fatima.png"],
+      "choices": []
+    },
+    {
+      "id": "ending_love_allahverdi",
+      "title": "Дорога к свободе",
+      "description": "Спасение с Аллахверди",
+      "background": "les.png",
+      "text": "Машина мчится по ночной дороге...",
+      "characters": ["fatima.png", "allahverdi.png"],
+      "choices": []
+    },
+    {
+      "id": "ending_smart_revenge",
+      "title": "Холодная месть",
+      "description": "Разум побеждает ярость",
+      "background": "police.png",
+      "text": "Ты сыграла свою роль идеально...",
+      "characters": ["fatima.png", "allahverdi.png", "rauf.png"],
+      "choices": []
+    },
+    {
+      "id": "ending_dramatic",
+      "title": "Цена правды",
+      "description": "Жертва ради спасения",
+      "background": "burn.png",
+      "text": "Флакон оказывается зажигательной смесью...",
+      "characters": ["fatima.png", "leyla.png", "allahverdi.png"],
+      "choices": []
+    },
+    {
+      "id": "ending_revenge",
+      "title": "Кровь на руках",
+      "description": "Месть своими руками",
+      "background": "blood.png",
+      "text": "Нож входит легко...",
+      "characters": ["fatima.png"],
+      "choices": []
+    },
+    {
+      "id": "ending_unexpected_truce",
+      "title": "Неожиданное перемирие",
+      "description": "Сложный путь прощения",
+      "background": "hospital.png",
+      "text": "Атилла в больничной палате...",
+      "characters": ["fatima.png", "attila.png"],
+      "choices": []
+    }
+  ]
+}
