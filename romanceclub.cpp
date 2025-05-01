@@ -12,6 +12,8 @@
 #include <QDir>
 #include <QScrollArea>
 #include <QApplication>
+#include <QWidget>
+#include <QLayout>
 
 RomanceClub::RomanceClub(QWidget *parent) : QMainWindow(parent)
 {
@@ -19,7 +21,7 @@ RomanceClub::RomanceClub(QWidget *parent) : QMainWindow(parent)
     characterImages = {
         {"fatima.png", ":/images/characters/fatima.png"},
         {"attila.png", ":/images/characters/attila.png"},
-        {"alahverdi.png", ":/images/characters/alahverdi.png"},
+        {"alahverdi.png", ":/images/characters/allahverdi.png"},
         {"leyla.png", ":/images/characters/leyla.png"},
         {"rauf.png", ":/images/characters/rauf.png"}
     };
