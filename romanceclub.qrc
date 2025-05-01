@@ -4,9 +4,8 @@
     </qresource>
     <qresource prefix="/images">
         <file>backgrounds/car.png</file>
-        <file>backgrounds/room.png</file>
-        <file>backgrounds/sea.png</file>
-        <file>backgrounds/street.png</file>
+        <file>backgrounds/home.png</file>
+        <file>backgrounds/waves.png</file>
         <file>backgrounds/wedding.png</file>
         <file>backgrounds/welcome.png</file>
         <file>characters/allahverdi.png</file>
